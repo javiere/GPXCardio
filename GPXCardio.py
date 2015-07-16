@@ -1,8 +1,12 @@
 """
-Reads the cardio data from GPX files and generates plots with it
+Reads the cardio data from GPX files and generates plots with it.
+
+Requires the following libraries:
+    * matplotlib
 
 Author: Javier Espigares Martin
 Email: javierespigares@gmail.com
+GNU v2.0 License
 """
 from datetime import datetime, date, time
 
@@ -37,6 +41,16 @@ class GPXCardio():
                       "schemaLocation": "",
                       "gpxtpx": "http://www.garmin.com/xmlschemas/TrackPointExtension/v1",
                       "gpxx": "http://www.garmin.com/xmlschemas/GpxExtensions/v3"}
+    self.getCardio()
+    if verbose :
+        print selfe
+  def __str__(self):
+    if not hasattr(self, '__heart_rate__'):
+      self.getCardio()
+    s = "Heart Rate record for " + self.__filename__ + "\n"
+    for i in self.__heart_rate__:
+      s = s + "Time : " + str(i[0]) + " Heart Rate: " + str(i[1]) +"\n"
+    return s
 
   def getCardio(self):
     """
@@ -67,10 +81,6 @@ class GPXCardio():
       del(tm)
       tm = datetime.combine(d, t)
       self.__heart_rate__.append((tm, float(hr)))
-    if self.__verbose__:
-      print "Heart Rate record for ", self.__filename__
-      for i in self.__heart_rate__:
-        print "Time :", i[0], " HR: ", i[1]
     return self.__heart_rate__
 
   def plotCardio(self):
@@ -123,5 +133,6 @@ def compare_hr_run(filename1, filename2, descriptor1='1st HR',
 
   plt.show()
 
-if __name__ == "__main__":
-  compare_hr_run('data/Garmin.gpx', 'data/Microsoft.gpx', 'Garmin', 'MS Band')
+# if __name__ == "__main__":
+#   compare_hr_run(
+#       'data/Garmin.gpx', 'data/Microsoft.gpx', 'Garmin', 'MS Band')
